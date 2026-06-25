@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BigQuery Release Notes Dashboard & Social Composer</title>
+  <meta name="description" content="View official Google Cloud BigQuery release notes, track updates, and quickly tweet about changes in one slick interface.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo-section">
+        <div class="logo-icon">BQ</div>
+        <div class="logo-text">
+          <h1>BigQuery Release Notes</h1>
+          <p>Official Google Cloud Feed Tracker</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="last-update-tag">Synced: <span id="last-fetched-time">--:--:--</span></span>
+        <button id="refresh-btn" class="btn-primary" title="Fetch live release notes from Google Cloud feed">
+          <span class="spinner"></span>
+          <span class="btn-text">Refresh Feed</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main>
+    <!-- Left Column: Search, Filters & Feed -->
+    <div class="feed-pane">
+      <!-- Search & Filters Card -->
+      <div class="controls-card">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search updates by keyword (e.g. VECTOR_SEARCH, Simba, GA)...">
+        </div>
+        <div class="filter-chips">
+          <span class="filter-label">Filter by:</span>
+          <button class="chip active" data-type="all">All</button>
+          <button class="chip" data-type="Feature">Features</button>
+          <button class="chip" data-type="Change">Changes</button>
+          <button class="chip" data-type="Breaking">Breaking</button>
+          <button class="chip" data-type="Issue">Issues</button>
+          <button class="chip" data-type="Announcement">Announcements</button>
+        </div>
+      </div>
+
+      <!-- Feed List -->
+      <div id="updates-list" class="updates-list">
+        <!-- Rendered dynamically by JavaScript -->
+        <div class="empty-state">
+          <div class="empty-state-icon">📡</div>
+          <p>Connecting to Google Cloud feeds. Loading updates...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Detail Pane, Stats & Tweet Composer -->
+    <div class="sidebar-pane">
+      <!-- Stats Summary Card -->
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div id="stat-total" class="stat-value">0</div>
+          <div class="stat-label">Total Items</div>
+        </div>
+        <div class="stat-item" style="border-bottom: 2px solid var(--color-feature);">
+          <div id="stat-features" class="stat-value" style="color: var(--color-feature);">0</div>
+          <div class="stat-label">Features</div>
+        </div>
+        <div class="stat-item" style="border-bottom: 2px solid var(--color-change);">
+          <div id="stat-changes" class="stat-value" style="color: var(--color-change);">0</div>
+          <div class="stat-label">Changes</div>
+        </div>
+        <div class="stat-item" style="border-bottom: 2px solid var(--color-breaking);">
+          <div id="stat-breaking" class="stat-value" style="color: var(--color-breaking);">0</div>
+          <div class="stat-label">Breaking</div>
+        </div>
+      </div>
+
+      <!-- Selected Update Details & Composer -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">
+          <span>Release Workspace</span>
+          <span class="composer-title" style="color: var(--text-muted); font-size: 0.75rem;">Composer</span>
+        </div>
+
+        <!-- Empty selection state -->
+        <div id="empty-state" class="empty-state">
+          <div class="empty-state-icon">⚡</div>
+          <p>Select a release card on the left to view full details and compose a Tweet.</p>
+        </div>
+
+        <!-- Workspace Active State -->
+        <div id="workspace-active" class="workspace-active" style="display: none;">
+          <div class="detail-header">
+            <span id="detail-date" class="date-text">June 25, 2026</span>
+            <span id="detail-badge" class="badge">Feature</span>
+          </div>
+
+          <!-- Parsed Content -->
+          <div id="detail-body" class="detail-content">
+            <!-- Populated via JavaScript -->
+          </div>
+
+          <!-- Social/Share Tools -->
+          <div class="tweet-composer-box">
+            <div class="tweet-composer-header">
+              <span class="composer-title">🐦 Tweet Draft</span>
+              <span id="char-count" class="char-counter">0/250</span>
+            </div>
+            
+            <textarea id="tweet-textarea" class="composer-textarea" rows="4" placeholder="Edit your tweet here..."></textarea>
+            
+            <div class="composer-footer">
+              <a id="detail-link" href="#" target="_blank" class="btn-secondary" title="Open official documentation link">
+                🔗 View Docs
+              </a>
+              <button id="tweet-btn" class="btn-tweet" title="Share this draft to Twitter / X">
+                <span>Post to X</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <span id="toast-text">Toast message details</span>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
